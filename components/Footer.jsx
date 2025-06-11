@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 
 export default function Footer() {
   return (
-    <motion.footer 
+  <div className='bg-gray-50'>
+      <motion.footer 
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
     viewport={{ once: true }}
@@ -32,5 +33,6 @@ export default function Footer() {
     </div>
     <p>© 2025 Sharp Pocket. All rights reserved.</p>
   </motion.footer>
+  </div>
   )
 }
