@@ -62,45 +62,7 @@ const ShopPocketLanding = () => {
   return (
     <div className="bg-gray-50 text-gray-800 font-sans">
       {/* Header */}
-      <motion.header 
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white shadow-sm sticky top-0 z-50"
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
-          <motion.h1 
-            whileHover={{ scale: 1.05 }}
-            className="text-xl sm:text-2xl font-bold cursor-pointer" 
-            style={{ color: 'rgba(0, 0, 0, 0.8)' }}
-          >
-            Sharp Pocket
-          </motion.h1>
-          <div className="flex gap-2 sm:gap-3">
-            <motion.a 
-              href="#download" 
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-white px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-1"
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
-            >
-              <FaApple />
-              <span className="hidden sm:inline">iOS</span>
-            </motion.a>
-            <motion.a 
-              href="#download" 
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-white px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-1"
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
-            >
-              <IoLogoAndroid />
-              <span className="hidden sm:inline">Android</span>
-            </motion.a>
-          </div>
-        </div>
-      </motion.header>
-
+       
       {/* Hero Section */}
       <section className="text-center py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: '#D9D3F1' }}>
         <motion.div
@@ -235,16 +197,7 @@ const ShopPocketLanding = () => {
       </motion.section>
 
       {/* Footer */}
-      <motion.footer 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="text-white text-center py-6 sm:py-8 text-xs sm:text-sm"
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
-      >
-        © 2025 Sharp Pocket. All rights reserved.
-      </motion.footer>
+    
     </div>
   );
 };
