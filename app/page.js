@@ -1,8 +1,9 @@
 'use client'
 import React from 'react';
 import { motion } from 'framer-motion';
-import { IoLogoAndroid } from "react-icons/io";
-import { FaApple } from "react-icons/fa";
+import appLogo from "../public/Screenshot 2025-06-13 192715.png";
+import Image from 'next/image';
+
 const ShopPocketLanding = () => {
   const features = [
     {
@@ -61,43 +62,69 @@ const ShopPocketLanding = () => {
 
   return (
     <div className="bg-gray-50 text-gray-800 font-sans">
-      {/* Header */}
-       
       {/* Hero Section */}
-      <section className="text-center py-16 sm:py-20 px-4 sm:px-6" style={{ backgroundColor: '#D9D3F1' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <motion.h2 
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight" 
-            style={{ color: 'rgba(0, 0, 0, 0.8)' }}
-          >
-            Your Pocket-Sized Payment Power
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-base sm:text-lg mb-6 sm:mb-8 max-w-xl mx-auto leading-relaxed px-2" 
-            style={{ color: 'rgba(0, 0, 0, 0.6)' }}
-          >
-            With Sharp Pocket, pay bills, buy airtime and data, settle electricity, and send or withdraw money—fast, simple, and secure.
-          </motion.p>
-          <motion.a 
-            href="#download" 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            whileHover={{ scale: 1.05, y: -3 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold shadow-lg transition-all duration-200"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
-          >
-            Download Now
-          </motion.a>
-        </motion.div>
+      <section className="py-16 sm:py-20 lg:py-12 px-4 sm:px-6" style={{ backgroundColor: '#D9D3F1' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-center lg:text-left lg:-mt-20"
+            >
+              <motion.h2 
+                className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight" 
+                style={{ color: 'rgba(0, 0, 0, 0.8)' }}
+              >
+                Your Pocket-Sized Payment Power
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 leading-relaxed" 
+                style={{ color: 'rgba(0, 0, 0, 0.6)' }}
+              >
+                With Sharp Pocket, pay bills, buy airtime and data, settle electricity, and send or withdraw money—fast, simple, and secure.
+              </motion.p>
+              <motion.a 
+                href="#download" 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-block text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold shadow-lg transition-all duration-200"
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
+              >
+                Download Now
+              </motion.a>
+            </motion.div>
+
+            {/* App Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="flex justify-center lg:justify-end"
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                className="lg:mr-16"
+              >
+                <Image
+                  src={appLogo}
+                  alt="Sharp Pocket App Screenshot" 
+                  className="w-72 h-auto rounded-2xl shadow-2xl lg:transform lg:rotate-[8deg]"
+                  width={500}
+                  height={500}
+                />
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* Features */}
@@ -195,9 +222,6 @@ const ShopPocketLanding = () => {
           </motion.a>
         </motion.div>
       </motion.section>
-
-      {/* Footer */}
-    
     </div>
   );
 };

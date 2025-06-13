@@ -3,6 +3,8 @@ import React from 'react'
 import { motion } from 'framer-motion';
 import { FaApple } from "react-icons/fa";
 import { IoLogoAndroid } from "react-icons/io";
+import Image from 'next/image';
+import logo from "../public/Screenshot 2025-06-13 192715.png";
 export default function Navbar() {
   return (
     <div>
@@ -13,14 +15,17 @@ export default function Navbar() {
         className="bg-white shadow-sm sticky top-0 z-50"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+         <div className='flex items-center gap-2'>
+         <Image src={logo} alt="logo" width={100} height={100} />
           <motion.a 
             href="/"
             whileHover={{ scale: 1.05 }}
-            className="text-xl sm:text-2xl font-bold cursor-pointer" 
+            className="text-xl sm:text-2xl font-bold cursor-pointer ml-2" 
             style={{ color: 'rgba(0, 0, 0, 0.8)' }}
           >
             Sharp Pocket
           </motion.a>
+         </div>
           <div className="flex gap-2 sm:gap-3">
             <motion.a 
               href="#download" 
