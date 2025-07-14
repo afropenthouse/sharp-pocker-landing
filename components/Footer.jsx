@@ -31,7 +31,7 @@ export default function Footer() {
         Terms of Service
       </motion.a>
     </div>
-    <p>© 2025 Sharp Pocket. All rights reserved.</p>
+    <p>© 2025 Hallatech. All rights reserved.</p>
   </motion.footer>
   </div>
   )
