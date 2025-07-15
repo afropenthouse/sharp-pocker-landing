@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Footer() {
   return (
-  <div className='bg-gray-50'>
+  <div className='bg-gray-50' id='footer'>
       <motion.footer 
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
@@ -32,6 +32,7 @@ export default function Footer() {
       </motion.a>
     </div>
     <p>© 2025 Hallatech. All rights reserved.</p>
+    <p>support@hallatech.com</p>
   </motion.footer>
   </div>
   )

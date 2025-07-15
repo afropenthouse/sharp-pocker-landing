@@ -207,13 +207,13 @@ const TermsOfService = () => {
               If you have any questions about these Terms of Service, please contact us at:
             </p>
             <motion.a
-              href="mailto:legal@sharppocket.com"
+              href="mailto:support@hallatech.com"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-block text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200"
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
             >
-              legal@sharppocket.com
+              support@hallatech.com
             </motion.a>
           </motion.div>
         </motion.div>
