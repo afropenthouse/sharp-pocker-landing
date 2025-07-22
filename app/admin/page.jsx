@@ -112,7 +112,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="bg-gray-50 flex items-center justify-center px-4 sm:px-6 py-8 mb-16">
+    <div className="bg-gray-50 flex items-center justify-center px-4 sm:px-6 py-8 mb-16 text-black">
       <motion.div
         variants={containerVariants}
         initial="hidden"
