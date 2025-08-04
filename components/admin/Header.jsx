@@ -1,12 +1,16 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { HiUsers, HiChartBar, HiCreditCard, HiCurrencyDollar, HiClipboardList, HiPhone, HiGlobeAlt, HiLightningBolt, HiDesktopComputer, HiOfficeBuilding } from 'react-icons/hi'
+import { HiUsers, HiChartBar, HiCreditCard, HiCurrencyDollar, HiClipboardList, HiPhone, HiGlobeAlt, HiLightningBolt, HiDesktopComputer, HiOfficeBuilding, HiCalendar, HiChevronDown, HiCheck } from 'react-icons/hi'
 
-// Mock API function - replace with your actual API call
-const fetchAdminStats = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/stats`, {
+// API function with optional days parameter
+const fetchAdminStats = async (days = null) => {
+  const url = days 
+    ? `${process.env.NEXT_PUBLIC_API_URL}/admin/stats?days=${days}`
+    : `${process.env.NEXT_PUBLIC_API_URL}/admin/stats`
+    
+  const response = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`,
       'Content-Type': 'application/json'
@@ -17,9 +21,25 @@ const fetchAdminStats = async () => {
 }
 
 export default function HeaderWithStats() {
-  const { data: stats, isLoading, error } = useQuery({
-    queryKey: ['adminStats'],
-    queryFn: fetchAdminStats,
+  const [selectedDays, setSelectedDays] = useState(null)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [customDays, setCustomDays] = useState('')
+  const [showCustomInput, setShowCustomInput] = useState(false)
+
+  // Predefined filter options
+  const filterOptions = [
+    { label: 'All Time', value: null },
+    { label: 'Last 7 Days', value: 7 },
+    { label: 'Last 14 Days', value: 14 },
+    { label: 'Last 30 Days', value: 30 },
+    { label: 'Last 60 Days', value: 60 },
+    { label: 'Last 90 Days', value: 90 },
+    { label: 'Custom Days...', value: 'custom' },
+  ]
+
+  const { data: stats, isLoading, error, refetch } = useQuery({
+    queryKey: ['adminStats', selectedDays],
+    queryFn: () => fetchAdminStats(selectedDays),
     refetchInterval: 30000, // Refetch every 30 seconds
   })
 
@@ -70,13 +90,68 @@ export default function HeaderWithStats() {
     return new Intl.NumberFormat('en-US').format(num)
   }
 
+  const handleFilterChange = (value) => {
+    if (value === 'custom') {
+      setShowCustomInput(true)
+    } else {
+      setSelectedDays(value)
+      setIsDropdownOpen(false)
+      setShowCustomInput(false)
+      setCustomDays('')
+    }
+  }
+
+  const handleCustomDaysSubmit = () => {
+    const days = parseInt(customDays)
+    if (!isNaN(days) && days > 0) {
+      setSelectedDays(days)
+      setIsDropdownOpen(false)
+      setShowCustomInput(false)
+    }
+  }
+
+  const handleCustomDaysKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleCustomDaysSubmit()
+    }
+  }
+
+  const getSelectedFilterLabel = () => {
+    // Check if it's a custom value (not in predefined options)
+    const isCustomValue = selectedDays && !filterOptions.find(option => option.value === selectedDays)
+    
+    if (isCustomValue) {
+      return `Last ${selectedDays} Days`
+    }
+    
+    const selected = filterOptions.find(option => option.value === selectedDays)
+    return selected ? selected.label : 'All Time'
+  }
+
+  const getDateRangeText = () => {
+    if (!selectedDays || !stats?.data?.filterInfo?.dateRange) return ''
+    
+    const fromDate = new Date(stats.data.filterInfo.dateRange.from).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+    const toDate = new Date(stats.data.filterInfo.dateRange.to).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+    
+    return `${fromDate} - ${toDate}`
+  }
+
   if (error) {
     return (
       <div className="bg-white shadow-sm rounded-2xl p-6 mb-8">
         <div className="text-center text-red-600">
           <p>Failed to load admin statistics</p>
           <button 
-            onClick={() => window.location.reload()} 
+            onClick={() => refetch()} 
             className="mt-2 px-4 py-2 bg-red-100 text-red-700 rounded-xl text-sm hover:bg-red-200 transition-colors"
           >
             Retry
@@ -113,6 +188,87 @@ export default function HeaderWithStats() {
           <p className="font-semibold" style={{ color: 'rgba(0, 0, 0, 0.8)' }}>
             {adminUser ? `${adminUser.firstName} ${adminUser.lastName}` : 'Admin User'}
           </p>
+        </div>
+      </motion.div>
+
+      {/* Filter Section */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4"
+      >
+        <div className="flex items-center gap-2">
+          <HiCalendar className="w-5 h-5 text-gray-600" />
+          <span className="text-sm text-gray-600">Showing data for:</span>
+          <span className="font-medium text-gray-800">{getSelectedFilterLabel()}</span>
+          {getDateRangeText() && (
+            <span className="text-xs text-gray-500 ml-2">({getDateRangeText()})</span>
+          )}
+        </div>
+
+        {/* Filter Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl text-black hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          >
+            <HiCalendar className="w-4 h-4 text-gray-600" />
+            <span className="text-sm font-medium">{getSelectedFilterLabel()}</span>
+            <HiChevronDown className={`w-4 h-4 text-black transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {isDropdownOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10"
+            >
+              {filterOptions.map((option) => (
+                <div key={option.label}>
+                  {option.value === 'custom' && showCustomInput ? (
+                    <div className="px-4 py-3 border-t border-gray-100">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          value={customDays}
+                          onChange={(e) => setCustomDays(e.target.value)}
+                          onKeyPress={handleCustomDaysKeyPress}
+                          placeholder="Days"
+                          min="1"
+                          className="w-20 px-2 py-1 text-sm border border-gray-300 rounded text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                          autoFocus
+                        />
+                        <button
+                          onClick={handleCustomDaysSubmit}
+                          disabled={!customDays || isNaN(parseInt(customDays)) || parseInt(customDays) <= 0}
+                          className="p-1 text-black rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <HiCheck className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => handleFilterChange(option.value)}
+                      className={`w-full text-left text-black px-4 py-3 text-sm hover:bg-gray-50 transition-colors first:rounded-t-xl ${
+                        option.value === 'custom' ? 'border-t border-gray-100' : ''
+                      } ${
+                        option.value === null && !option.value === 'custom' ? 'last:rounded-b-xl' : ''
+                      } ${
+                        selectedDays === option.value 
+                          ? 'bg-blue-50 text-black font-medium' 
+                          : 'text-black'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </motion.div>
 
@@ -211,7 +367,7 @@ export default function HeaderWithStats() {
             </div>
           ) : (
             <>
-              <p className="text-sm text-gray-600 mb-1 font-medium">Total Revenue</p>
+              <p className="text-sm text-gray-600 mb-1 font-medium">Total Transactions</p>
               <p className="text-lg sm:text-xl font-bold" style={{ color: 'rgba(0, 0, 0, 0.8)' }}>
                 {formatCurrency(stats?.data?.totalRevenue || 0)}
               </p>
@@ -279,6 +435,14 @@ export default function HeaderWithStats() {
           )}
         </div>
       </motion.div>
+
+      {/* Click outside to close dropdown */}
+      {isDropdownOpen && (
+        <div 
+          className="fixed inset-0 z-0" 
+          onClick={() => setIsDropdownOpen(false)}
+        />
+      )}
     </div>
   )
-}   
+}
